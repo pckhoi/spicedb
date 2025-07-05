@@ -10,6 +10,7 @@ import (
 
 	"github.com/authzed/spicedb/internal/datastore/common"
 	pgxcommon "github.com/authzed/spicedb/internal/datastore/postgres/common"
+	log "github.com/authzed/spicedb/internal/logging"
 	"github.com/authzed/spicedb/pkg/spiceerrors"
 )
 
@@ -70,5 +71,6 @@ func (srqf strictReaderQueryFuncs) addAssertToSelectSQL(sql string) string {
 		END
 		$$;
 	`, sql, srqf.revision.snapshot.xmin-1, srqf.revision.snapshot.xmin-1)
+	log.Trace().Str("sql", wrapped).Msg("wrapped query for strict reader")
 	return wrapped
 }
