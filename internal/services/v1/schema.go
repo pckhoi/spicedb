@@ -101,6 +101,11 @@ func (ss *schemaServer) ReadSchema(ctx context.Context, _ *v1.ReadSchemaRequest)
 	if err != nil {
 		return nil, ss.rewriteError(ctx, err)
 	}
+	log.Ctx(ctx).Trace().
+		Str("revision", headRevision.String()).
+		Int("namespaceDefinitions", len(nsDefs)).
+		Int("caveatDefinitions", len(caveatDefs)).
+		Msg("read schema from head revision")
 
 	if len(nsDefs) == 0 {
 		return nil, status.Errorf(codes.NotFound, "No schema has been defined; please call WriteSchema to start")
@@ -119,6 +124,7 @@ func (ss *schemaServer) ReadSchema(ctx context.Context, _ *v1.ReadSchemaRequest)
 	if err != nil {
 		return nil, ss.rewriteError(ctx, err)
 	}
+	log.Ctx(ctx).Trace().Str("schema", schemaText).Msg("generated schema text")
 
 	dispatchCount, err := genutil.EnsureUInt32(len(nsDefs) + len(caveatDefs))
 	if err != nil {
