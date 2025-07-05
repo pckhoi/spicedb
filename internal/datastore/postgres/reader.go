@@ -11,7 +11,6 @@ import (
 	"github.com/authzed/spicedb/internal/datastore/common"
 	pgxcommon "github.com/authzed/spicedb/internal/datastore/postgres/common"
 	"github.com/authzed/spicedb/internal/datastore/postgres/schema"
-	log "github.com/authzed/spicedb/internal/logging"
 	"github.com/authzed/spicedb/pkg/datastore"
 	"github.com/authzed/spicedb/pkg/datastore/options"
 	core "github.com/authzed/spicedb/pkg/proto/core/v1"
@@ -268,10 +267,6 @@ func loadAllNamespaces(
 	if err != nil {
 		return nil, err
 	}
-	log.Ctx(ctx).Trace().
-		Str("sql", sql).
-		Any("args", args).
-		Msg("loadAllNamespaces")
 
 	var nsDefs []datastore.RevisionedNamespace
 	err = tx.QueryFunc(ctx, func(ctx context.Context, rows pgx.Rows) error {

@@ -5,6 +5,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	grpcvalidate "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/validator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -91,6 +92,7 @@ func (ss *schemaServer) ReadSchema(ctx context.Context, _ *v1.ReadSchemaRequest)
 	}
 
 	reader := ds.SnapshotReader(headRevision)
+	spew.Dump(reader)
 
 	nsDefs, err := reader.ListAllNamespaces(ctx)
 	if err != nil {
